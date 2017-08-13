@@ -5,15 +5,20 @@ using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CityInfo.WebApi.Controllers
 {
+    /// <summary>
+    /// Resource for managing city information
+    /// </summary>
     [Route("api/cities")]
     public class CitiesController : Controller
     {
         private static ICitiesRepository _citiesRepository;
         private static readonly string GetCitysPlaceToVisitByIdRouteName = "GetCitysPlaceToVisitById";
 
+        /// <inheritdoc />
         public CitiesController()
         {
             if (_citiesRepository == null)
@@ -22,7 +27,12 @@ namespace CityInfo.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns all cities
+        /// </summary>
+        /// <returns>List of cities</returns>
         [HttpGet()]
+        [SwaggerResponse(200, typeof(List<CityDocument>))]
         public ActionResult GetAll()
         {
             List<CityDocument> cities = _citiesRepository.GetAllCities();
@@ -30,7 +40,13 @@ namespace CityInfo.WebApi.Controllers
             return Ok(cities);
         }
 
+        /// <summary>
+        /// Returns single city by id
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <returns>Single city</returns>
         [HttpGet("{cityId:int}")]
+        [SwaggerResponse(200, typeof(CityDocument))]
         public ActionResult GetById(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -43,6 +59,11 @@ namespace CityInfo.WebApi.Controllers
             return Ok(cityDocument);
         }
 
+        /// <summary>
+        /// Removes city by id
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <returns></returns>
         [HttpDelete("{cityId:int}")]
         public ActionResult DeleteById(int cityId)
         {
@@ -58,6 +79,11 @@ namespace CityInfo.WebApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Get list of places to visit in city
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <returns>Places to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit")]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
@@ -71,6 +97,12 @@ namespace CityInfo.WebApi.Controllers
             return Ok(cityDocument.PlacesToVisit);
         }
 
+        /// <summary>
+        /// Get city's place to visit by id
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <param name="placeToVisitId">Unique identifier for city's place to visit</param>
+        /// <returns>Single place to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = "GetCitysPlaceToVisitById")]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
@@ -91,6 +123,12 @@ namespace CityInfo.WebApi.Controllers
             return Ok(placeToVisitDocument);
         }
 
+        /// <summary>
+        /// Adds new place to visit for city
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <param name="newPlaceToVisit">New place to visit</param>
+        /// <returns>Newly created place to visit</returns>
         [HttpPost("{cityId:int}/placesToVisit")]
         public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
         {

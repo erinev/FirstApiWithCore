@@ -4,9 +4,9 @@ namespace CityInfo.Contracts.Errors
 {
     public class ErrorResponse
     {
-        public string Reason { get; }
-        public string Message { get; }
-        public Dictionary<string, string> Params { get; }
+        private string Reason { get; }
+        private string Message { get; }
+        private Dictionary<string, string> Params { get; }
 
         public ErrorResponse(string reason, string message) : this(reason, message, null)
         {

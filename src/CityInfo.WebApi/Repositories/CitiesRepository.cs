@@ -14,20 +14,35 @@ namespace CityInfo.WebApi.Repositories
         PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit);
     }
 
+    /// <summary>
+    /// Provides set of methods to work with cities
+    /// </summary>
     public class CitiesRepository : ICitiesRepository
     {
         private List<CityDocument> _cities;
 
+        /// <summary>
+        /// CitiesRepository constructor
+        /// </summary>
         public CitiesRepository()
         {
             _cities = BuildCitiesMock();
         }
 
+        /// <summary>
+        /// Returns all cities
+        /// </summary>
+        /// <returns>List of cities</returns>
         public List<CityDocument> GetAllCities()
         {
             return _cities;
         }
 
+        /// <summary>
+        /// Returns city by id
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <returns>Single city</returns>
         public CityDocument GetCityById(int cityId)
         {
             CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
@@ -35,6 +50,10 @@ namespace CityInfo.WebApi.Repositories
             return cityDocument;
         }
 
+        /// <summary>
+        /// Deletes city by id
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
         public void DeleteCityById(int cityId)
         {
             List<CityDocument> listWithoutRemovedCity = _cities.Where(city => city.Id != cityId).ToList();
@@ -42,6 +61,12 @@ namespace CityInfo.WebApi.Repositories
             _cities = listWithoutRemovedCity;
         }
 
+        /// <summary>
+        /// Adds new place to visit for city
+        /// </summary>
+        /// <param name="cityId">Unique identifier for city</param>
+        /// <param name="newPlaceToVisit">New place to visit</param>
+        /// <returns>Newly created place to visit</returns>
         public PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit)
         {
             CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
