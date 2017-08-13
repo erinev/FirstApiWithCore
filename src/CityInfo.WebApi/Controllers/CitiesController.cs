@@ -97,13 +97,13 @@ namespace CityInfo.WebApi.Controllers
         {
             if (newPlaceToVisit == null)
             {
-                return BadRequest(ErrorResponses.BadRequest.PlaceToVisitErrors.BuildPlaceToVisitNotProvidedResponse());
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildResourceNotProvidedResponse());
             }
 
             if (newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
                 newPlaceToVisit.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
-                return BadRequest(ErrorResponses.BadRequest.PlaceToVisitErrors.BuildPlaceToVisitNameIsInvalidResponse(newPlaceToVisit));
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildNameIsInvalidResponse(newPlaceToVisit));
             }
 
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);

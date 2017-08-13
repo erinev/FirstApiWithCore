@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Errors;
-using CityInfo.Contracts.WriteModel;
 
 namespace CityInfo.WebApi.ErrorResponses
 {
     public static class BadRequest
     {
-        public static class PlaceToVisitErrors
+        public static class PlaceToVisit
         {
-            public static ErrorResponse BuildPlaceToVisitNameIsInvalidResponse(PlaceToVisit placeToVisit)
+            public static ErrorResponse BuildNameIsInvalidResponse(Contracts.WriteModel.PlaceToVisit placeToVisit)
             {
                 return new ErrorResponse(
                     "PlaceToVisitNameIsInvalid",
@@ -24,7 +23,7 @@ namespace CityInfo.WebApi.ErrorResponses
                 );
             }
 
-            public static ErrorResponse BuildPlaceToVisitNotProvidedResponse()
+            public static ErrorResponse BuildResourceNotProvidedResponse()
             {
                 return new ErrorResponse(
                     "PlaceToVisitIsNotProvided",
