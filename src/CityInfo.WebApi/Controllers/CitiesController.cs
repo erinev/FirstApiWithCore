@@ -65,6 +65,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="cityId">Unique identifier for city</param>
         /// <returns></returns>
         [HttpDelete("{cityId:int}")]
+        [SwaggerResponse(204)]
         public ActionResult DeleteById(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -85,6 +86,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="cityId">Unique identifier for city</param>
         /// <returns>Places to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit")]
+        [SwaggerResponse(200, typeof(List<PlaceToVisitDocument>))]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -104,6 +106,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="placeToVisitId">Unique identifier for city's place to visit</param>
         /// <returns>Single place to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = "GetCitysPlaceToVisitById")]
+        [SwaggerResponse(200, typeof(PlaceToVisitDocument))]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -130,6 +133,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="newPlaceToVisit">New place to visit</param>
         /// <returns>Newly created place to visit</returns>
         [HttpPost("{cityId:int}/placesToVisit")]
+        [SwaggerResponse(201, typeof(PlaceToVisitDocument))]
         public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
         {
             if (newPlaceToVisit == null)
