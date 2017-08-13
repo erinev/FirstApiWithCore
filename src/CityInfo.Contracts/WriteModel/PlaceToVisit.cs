@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CityInfo.Contracts.Dtos
+namespace CityInfo.Contracts.WriteModel
 {
     public class PlaceToVisit
     {
-        [Required]
-        public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 

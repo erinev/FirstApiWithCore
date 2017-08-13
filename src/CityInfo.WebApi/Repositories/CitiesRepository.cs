@@ -1,65 +1,85 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CityInfo.Contracts.Dtos;
+using CityInfo.Contracts.Readmodel;
+using CityInfo.Contracts.WriteModel;
 
 namespace CityInfo.WebApi.Repositories
 {
     interface ICitiesRepository
     {
-        List<City> GetAll();
-        City GetById(int cityId);
-        void DeleteById(int cityId);
+        List<CityDocument> GetAllCities();
+        CityDocument GetCityById(int cityId);
+        void DeleteCityById(int cityId);
+
+        PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit);
     }
 
     public class CitiesRepository : ICitiesRepository
     {
-        private List<City> _cities;
+        private List<CityDocument> _cities;
 
         public CitiesRepository()
         {
             _cities = BuildCitiesMock();
         }
 
-        public List<City> GetAll()
+        public List<CityDocument> GetAllCities()
         {
             return _cities;
         }
 
-        public City GetById(int cityId)
+        public CityDocument GetCityById(int cityId)
         {
-            City foundCity = _cities.Find(city => city.Id == cityId);
+            CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
 
-            return foundCity;
+            return cityDocument;
         }
 
-        public void DeleteById(int cityId)
+        public void DeleteCityById(int cityId)
         {
-            List<City> listWithoutRemovedCity = _cities.Where(city => city.Id != cityId).ToList();
+            List<CityDocument> listWithoutRemovedCity = _cities.Where(city => city.Id != cityId).ToList();
 
             _cities = listWithoutRemovedCity;
         }
 
+        public PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit)
+        {
+            CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
+
+            var newPlaceToVisitDocument = new PlaceToVisitDocument
+            {
+                Id = cityDocument.NumberOfPlacesToVisit + 1,
+                Name = newPlaceToVisit.Name,
+                Description = newPlaceToVisit.Description,
+                Address = newPlaceToVisit.Address
+            };
+
+            cityDocument.PlacesToVisit.Add(newPlaceToVisitDocument);
+
+            return newPlaceToVisitDocument;
+        }
+
         #region Private Functions
 
-        private static List<City> BuildCitiesMock()
+        private static List<CityDocument> BuildCitiesMock()
         {
-            var cities = new List<City>
+            var cities = new List<CityDocument>
             {
-                new City
+                new CityDocument
                 {
                     Id = 1,
                     Name = "Birštonas",
                     Description = "City of dreams",
-                    PlacesToVisit = new List<PlaceToVisit>
+                    PlacesToVisit = new List<PlaceToVisitDocument>
                     {
-                        new PlaceToVisit
+                        new PlaceToVisitDocument
                         {
                             Id = 1,
                             Name = "Banginuko vaišės",
                             Description = "Deserts and snacks caffe",
                             Address = "Birutės g. 29, Birštonas LT-59217"
                         },
-                        new PlaceToVisit
+                        new PlaceToVisitDocument
                         {
                             Id = 1,
                             Name = "Saulės terasa",
@@ -68,14 +88,14 @@ namespace CityInfo.WebApi.Repositories
                         },
                     }
                 },
-                new City
+                new CityDocument
                 {
                     Id = 2,
                     Name = "Kaunas",
                     Description = "City of contruction",
-                    PlacesToVisit = new List<PlaceToVisit>
+                    PlacesToVisit = new List<PlaceToVisitDocument>
                     {
-                        new PlaceToVisit
+                        new PlaceToVisitDocument
                         {
                             Id = 1,
                             Name = "Pilies Sodas",
@@ -84,14 +104,14 @@ namespace CityInfo.WebApi.Repositories
                         }
                     }
                 },
-                new City
+                new CityDocument
                 {
                     Id = 3,
                     Name = "Vilnius",
                     Description = "City of wasted money",
-                    PlacesToVisit = new List<PlaceToVisit>
+                    PlacesToVisit = new List<PlaceToVisitDocument>
                     {
-                        new PlaceToVisit
+                        new PlaceToVisitDocument
                         {
                             Id = 1,
                             Name = "Cat Caffe",

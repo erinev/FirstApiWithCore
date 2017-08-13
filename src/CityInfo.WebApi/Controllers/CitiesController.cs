@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CityInfo.Contracts.Dtos;
+using CityInfo.Contracts.Readmodel;
+using CityInfo.Contracts.WriteModel;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace CityInfo.WebApi.Controllers
     public class CitiesController : Controller
     {
         private static ICitiesRepository _citiesRepository;
+        private static readonly string GetCitysPlaceToVisitByIdRouteName = "GetCitysPlaceToVisitById";
 
         public CitiesController()
         {
@@ -22,7 +24,7 @@ namespace CityInfo.WebApi.Controllers
         [HttpGet()]
         public ActionResult GetAll()
         {
-            List<City> cities = _citiesRepository.GetAll();
+            List<CityDocument> cities = _citiesRepository.GetAllCities();
 
             return Ok(cities);
         }
@@ -30,27 +32,27 @@ namespace CityInfo.WebApi.Controllers
         [HttpGet("{cityId:int}")]
         public ActionResult GetById(int cityId)
         {
-            City city = _citiesRepository.GetById(cityId);
+            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
-            if (city == null)
+            if (cityDocument == null)
             {
                 return NotFound();
             }
 
-            return Ok(city);
+            return Ok(cityDocument);
         }
 
         [HttpDelete("{cityId:int}")]
         public ActionResult DeleteById(int cityId)
         {
-            City city = _citiesRepository.GetById(cityId);
+            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
-            if (city == null)
+            if (cityDocument == null)
             {
                 return NotFound();
             }
 
-            _citiesRepository.DeleteById(cityId);
+            _citiesRepository.DeleteCityById(cityId);
 
             return NoContent();
         }
@@ -58,34 +60,52 @@ namespace CityInfo.WebApi.Controllers
         [HttpGet("{cityId:int}/placesToVisit")]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
-            City city = _citiesRepository.GetById(cityId);
+            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
-            if (city == null)
+            if (cityDocument == null)
             {
                 return NotFound();
             }
 
-            return Ok(city.PlacesToVisit);
+            return Ok(cityDocument.PlacesToVisit);
         }
 
-        [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}")]
+        [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = "GetCitysPlaceToVisitById")]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
-            City city = _citiesRepository.GetById(cityId);
+            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
-            if (city is null)
+            if (cityDocument is null)
             {
                 return NotFound();
             }
 
-            PlaceToVisit placeToVisit = city.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
+            PlaceToVisitDocument placeToVisitDocument = cityDocument.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
 
-            if (placeToVisit is null)
+            if (placeToVisitDocument is null)
             {
                 return NotFound();
             }
 
-            return Ok(placeToVisit);
+            return Ok(placeToVisitDocument);
+        }
+
+        [HttpPost("{cityId:int}/placesToVisit")]
+        public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
+        {
+            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+
+            if (cityDocument == null)
+            {
+                return NotFound();
+            }
+
+            PlaceToVisitDocument addedPlaceToVisitDocument = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisit);
+
+            return CreatedAtRoute(
+                GetCitysPlaceToVisitByIdRouteName, 
+                new { cityId, placeToVisitId = addedPlaceToVisitDocument.Id }, 
+                addedPlaceToVisitDocument);
         }
     }
 }

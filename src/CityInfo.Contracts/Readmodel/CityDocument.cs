@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CityInfo.Contracts.Dtos
+namespace CityInfo.Contracts.Readmodel
 {
-    public class City
+    public class CityDocument
     {
         [Required]
         public int Id { get; set; }
@@ -18,6 +18,6 @@ namespace CityInfo.Contracts.Dtos
         public int NumberOfPlacesToVisit => PlacesToVisit.Count;
 
         [Required]
-        public List<PlaceToVisit> PlacesToVisit { get; set; } = new List<PlaceToVisit>();
+        public List<PlaceToVisitDocument> PlacesToVisit { get; set; } = new List<PlaceToVisitDocument>();
     }
 }
