@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;
+using CityInfo.WebApi.Errors;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -93,6 +95,17 @@ namespace CityInfo.WebApi.Controllers
         [HttpPost("{cityId:int}/placesToVisit")]
         public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
         {
+            if (newPlaceToVisit == null)
+            {
+                return BadRequest(BadRequestErrors.PlaceToVisitErrors.BuildPlaceToVisitNotProvidedResponse());
+            }
+
+            if (newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
+                newPlaceToVisit.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
+            {
+                return BadRequest(BadRequestErrors.PlaceToVisitErrors.BuildPlaceToVisitNameIsInvalidResponse(newPlaceToVisit));
+            }
+
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
             if (cityDocument == null)
