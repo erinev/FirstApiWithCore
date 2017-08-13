@@ -3,7 +3,6 @@ using System.Linq;
 using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;
-using CityInfo.WebApi.ErrorResponses;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
