@@ -3,3 +3,4 @@ obj/
 v15/
 bin/
 .vs/
+*.csproj.user
