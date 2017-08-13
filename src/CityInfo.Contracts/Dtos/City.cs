@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CityInfo.Contracts.Dtos
 {
@@ -12,5 +13,9 @@ namespace CityInfo.Contracts.Dtos
 
         [Required]
         public string Description { get; set; }
+
+        public List<PointOfInterest> PointOfInterests { get; set; } = new List<PointOfInterest>();
+
+        public int NumberOfPointOfInterests => PointOfInterests.Count;
     }
 }
