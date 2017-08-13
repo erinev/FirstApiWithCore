@@ -3,7 +3,7 @@ using System.Linq;
 using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;
-using CityInfo.WebApi.Errors;
+using CityInfo.WebApi.ErrorResponses;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -97,13 +97,13 @@ namespace CityInfo.WebApi.Controllers
         {
             if (newPlaceToVisit == null)
             {
-                return BadRequest(BadRequestErrors.PlaceToVisitErrors.BuildPlaceToVisitNotProvidedResponse());
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisitErrors.BuildPlaceToVisitNotProvidedResponse());
             }
 
             if (newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
                 newPlaceToVisit.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
-                return BadRequest(BadRequestErrors.PlaceToVisitErrors.BuildPlaceToVisitNameIsInvalidResponse(newPlaceToVisit));
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisitErrors.BuildPlaceToVisitNameIsInvalidResponse(newPlaceToVisit));
             }
 
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);

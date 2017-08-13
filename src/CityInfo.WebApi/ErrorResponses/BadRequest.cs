@@ -3,9 +3,9 @@ using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Errors;
 using CityInfo.Contracts.WriteModel;
 
-namespace CityInfo.WebApi.Errors
+namespace CityInfo.WebApi.ErrorResponses
 {
-    public static class BadRequestErrors
+    public static class BadRequest
     {
         public static class PlaceToVisitErrors
         {
