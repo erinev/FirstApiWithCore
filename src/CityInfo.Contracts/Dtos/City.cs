@@ -15,9 +15,9 @@ namespace CityInfo.Contracts.Dtos
         public string Description { get; set; }
 
         [Required]
-        public List<PointOfInterest> PointOfInterests { get; set; } = new List<PointOfInterest>();
+        public int NumberOfPlacesToVisit => PlacesToVisit.Count;
 
         [Required]
-        public int NumberOfPointOfInterests => PointOfInterests.Count;
+        public List<PlaceToVisit> PlacesToVisit { get; set; } = new List<PlaceToVisit>();
     }
 }
