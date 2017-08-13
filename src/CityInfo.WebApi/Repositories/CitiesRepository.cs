@@ -81,7 +81,7 @@ namespace CityInfo.WebApi.Repositories
                         },
                         new PlaceToVisitDocument
                         {
-                            Id = 1,
+                            Id = 2,
                             Name = "Saulės terasa",
                             Description = "Deserts and snack caffe on the top of 9th floor building",
                             Address = "Algirdo g. 14, Birštonas LT-59204"
