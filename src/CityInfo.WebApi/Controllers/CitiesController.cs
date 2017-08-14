@@ -53,7 +53,7 @@ namespace CityInfo.WebApi.Controllers
 
             if (cityDocument == null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
             return Ok(cityDocument);
@@ -72,7 +72,7 @@ namespace CityInfo.WebApi.Controllers
 
             if (cityDocument == null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
             _citiesRepository.DeleteCityById(cityId);
@@ -93,7 +93,7 @@ namespace CityInfo.WebApi.Controllers
 
             if (cityDocument == null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
             return Ok(cityDocument.PlacesToVisit);
@@ -113,14 +113,14 @@ namespace CityInfo.WebApi.Controllers
 
             if (cityDocument is null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
             PlaceToVisitDocument placeToVisitDocument = cityDocument.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
 
             if (placeToVisitDocument is null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.PlaceToVisit.BuildResponse(cityId, placeToVisitId));
             }
 
             return Ok(placeToVisitDocument);
@@ -141,17 +141,31 @@ namespace CityInfo.WebApi.Controllers
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildResourceNotProvidedResponse());
             }
 
-            if (newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
+            if (newPlaceToVisit.Name == null ||
+                newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
                 newPlaceToVisit.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildNameIsInvalidResponse(newPlaceToVisit));
+            }
+
+            if (newPlaceToVisit.Description == null ||
+                newPlaceToVisit.Description.Length > ValidationRules.PlaceToVisit.MaximumDescriptionLength)
+            {
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildDescriptionIsInvalidResponse(newPlaceToVisit));
+            }
+
+            if (newPlaceToVisit.Address == null ||
+                newPlaceToVisit.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength ||
+                newPlaceToVisit.Address.Length > ValidationRules.PlaceToVisit.MaximumAddressLength)
+            {
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildAddressIsInvalidResponse(newPlaceToVisit));
             }
 
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
 
             if (cityDocument == null)
             {
-                return NotFound();
+                return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
             PlaceToVisitDocument addedPlaceToVisitDocument = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisit);

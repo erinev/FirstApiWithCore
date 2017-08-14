@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CityInfo.Contracts.WriteModel
 {
+    [Serializable]
     public class PlaceToVisit
     {
         [Required]

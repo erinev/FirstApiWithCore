@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CityInfo.Contracts.Errors
 {
+    [Serializable]
     public class ErrorResponse
     {
-        private string Reason { get; }
-        private string Message { get; }
-        private Dictionary<string, string> Params { get; }
+        public string Reason { get; }
+        public string Message { get; }
+        public Dictionary<string, string> Params { get; }
 
         public ErrorResponse(string reason, string message) : this(reason, message, null)
         {

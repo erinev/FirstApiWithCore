@@ -1,11 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -18,6 +26,16 @@ namespace CityInfo.WebApi
     public class Startup
     {
         private static IConfigurationRoot Configuration { get; set; }
+        private static ILogger<Startup> Logger { get; set; }
+
+        /// <summary>
+        /// Startup contructor
+        /// </summary>
+        /// <param name="logger"></param>
+        public Startup(ILogger<Startup> logger)
+        {
+            Logger = logger;
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
@@ -29,8 +47,11 @@ namespace CityInfo.WebApi
             ConfigureApplicationConfigReader();
 
             services.AddMvc()
-                .AddJsonOptions(ConfigureNamingStrategy)
-                .AddMvcOptions(ConfigureOutputFormatters);
+                .AddMvcOptions(options =>
+                {
+                    ConfigureInputFormatters(options, services);
+                    ConfigureOutputFormatters(options);
+                });
 
             services.AddSwaggerGen(ConfigureSwaggerGen);
         }
@@ -75,6 +96,41 @@ namespace CityInfo.WebApi
             Configuration = builder.Build();
         }
 
+        private void ConfigureInputFormatters(MvcOptions options, IServiceCollection services)
+        {
+            options.InputFormatters.Clear();
+
+            var sereliazerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include,
+                ContractResolver = new DefaultContractResolver(),
+                SerializationBinder = new DefaultSerializationBinder(),
+                Converters = new List<JsonConverter>
+                {
+                    new StringEnumConverter(false)
+                }
+            };
+            options.InputFormatters.Add(new JsonInputFormatter(Logger, sereliazerSettings, ArrayPool<char>.Shared, new DefaultObjectPoolProvider()));
+        }
+
+        private void ConfigureOutputFormatters(MvcOptions options)
+        {
+            options.OutputFormatters.Clear();
+
+            var sereliazerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Converters = new List<JsonConverter>
+                {
+                    new StringEnumConverter(true)
+                }
+            };
+            options.OutputFormatters.Add(new JsonOutputFormatter(sereliazerSettings, ArrayPool<char>.Shared));
+
+            options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+        }
+
         private void ConfigureSwaggerGen(SwaggerGenOptions options)
         {
             string pathToDoc = Configuration["swagger:xmlDocsFileName"];
@@ -93,23 +149,6 @@ namespace CityInfo.WebApi
             options.IncludeXmlComments(fullXmlDocsFilePath);
 
             options.DescribeAllEnumsAsStrings();
-        }
-
-        private void ConfigureOutputFormatters(MvcOptions options)
-        {
-            options.OutputFormatters.Add(
-                new XmlDataContractSerializerOutputFormatter()
-            );
-        }
-
-        private void ConfigureNamingStrategy(MvcJsonOptions options)
-        {
-            var contractResolver = options.SerializerSettings?.ContractResolver as DefaultContractResolver;
-
-            if (contractResolver != null)
-            {
-                contractResolver.NamingStrategy = new CamelCaseNamingStrategy();
-            }
         }
 
         #endregion

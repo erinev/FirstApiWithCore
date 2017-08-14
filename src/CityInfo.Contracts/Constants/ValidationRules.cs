@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CityInfo.Contracts.Constants
+﻿namespace CityInfo.Contracts.Constants
 {
     public static class ValidationRules
     {
@@ -11,7 +9,7 @@ namespace CityInfo.Contracts.Constants
 
             public static int MaximumDescriptionLength => 1000;
 
-            public static int MiminumAddressLength => 10;
+            public static int MininumAddressLength => 6;
             public static int MaximumAddressLength => 200;
         }
     }
