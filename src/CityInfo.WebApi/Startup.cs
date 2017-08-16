@@ -133,20 +133,36 @@ namespace CityInfo.WebApi
         {
             string pathToDoc = Configuration["swagger:xmlDocsFileName"];
 
+            AddSwaggerGenInfo(options);
+
+            string fullXmlDocsFilePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, pathToDoc);
+            options.IncludeXmlComments(fullXmlDocsFilePath);
+
+            options.DescribeAllEnumsAsStrings();
+        }
+
+        private void AddSwaggerGenInfo(SwaggerGenOptions options)
+        {
             options.SwaggerDoc("v1",
                 new Info
                 {
                     Title = "City Info API",
                     Version = "v1",
                     Description = "A simple API which allows to query and modify cities information.",
-                    TermsOfService = "None"
+                    TermsOfService = "None",
+                    License = new License
+                    {
+                        Name = "The GNU General Public License v3.0",
+                        Url = "https://github.com/erinev/FirstApiWithCore/blob/master/LICENCE"
+                    },
+                    Contact = new Contact
+                    {
+                        Name = "Erikas Neverdauskas",
+                        Email = "erikasnever@hotmail.com",
+                        Url = "https://github.com/erinev"
+                    }
                 }
             );
-
-            string fullXmlDocsFilePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, pathToDoc);
-            options.IncludeXmlComments(fullXmlDocsFilePath);
-
-            options.DescribeAllEnumsAsStrings();
         }
 
         #endregion
