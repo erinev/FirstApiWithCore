@@ -24,7 +24,7 @@ namespace CityInfo.Configuration.Swagger.Examples
 
         public void Apply(Schema model, SchemaFilterContext context)
         {
-            object exampleValue = _exampleProvider.Get(model.GetType()) ?? DefaultExamplesProvider.Get(model.GetType());
+            object exampleValue = _exampleProvider.Get(context.SystemType) ?? DefaultExamplesProvider.Get(context.SystemType);
             if (exampleValue != null)
             {
                 model.Example = ConvertToCamelCase(exampleValue);
@@ -38,7 +38,11 @@ namespace CityInfo.Configuration.Swagger.Examples
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Converters = new List<JsonConverter>
                 {
-                    new StringEnumConverter() { CamelCaseText = true, AllowIntegerValues = false }
+                    new StringEnumConverter
+                    {
+                        CamelCaseText = true,
+                        AllowIntegerValues = false
+                    }
                 }
             });
             return JsonConvert.DeserializeObject(jsonString);
