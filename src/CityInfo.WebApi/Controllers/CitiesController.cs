@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CityInfo.WebApi.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Resource for managing city information
     /// </summary>
@@ -16,7 +17,7 @@ namespace CityInfo.WebApi.Controllers
     public class CitiesController : Controller
     {
         private static ICitiesRepository _citiesRepository;
-        private static readonly string GetCitysPlaceToVisitByIdRouteName = "GetCitysPlaceToVisitById";
+        private const string GetCitysPlaceToVisitByIdRouteName = "GetCitysPlaceToVisitById";
 
         /// <inheritdoc />
         public CitiesController()
@@ -105,7 +106,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="cityId">Unique identifier for city</param>
         /// <param name="placeToVisitId">Unique identifier for city's place to visit</param>
         /// <returns>Single place to visit</returns>
-        [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = "GetCitysPlaceToVisitById")]
+        [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = GetCitysPlaceToVisitByIdRouteName)]
         [SwaggerResponse(200, typeof(PlaceToVisitDocument))]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {

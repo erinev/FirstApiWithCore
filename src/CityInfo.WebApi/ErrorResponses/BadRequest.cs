@@ -23,7 +23,7 @@ namespace CityInfo.WebApi.ErrorResponses
                 return new BadRequestResponse(
                     "PlaceToVisitIsNotProvided",
                     "Place to visit resource is not provided within request",
-                    new Dictionary<string, string> { }
+                    new Dictionary<string, string>()
                 );
             }
 

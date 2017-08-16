@@ -4,9 +4,9 @@ using CityInfo.Contracts.WriteModel;
 
 namespace CityInfo.WebApi.Examples
 {
-    internal class Examples
+    internal static class Examples
     {
-        internal static CityDocument CityDocumentExample = new CityDocument
+        internal static readonly CityDocument CityDocumentExample = new CityDocument
         {
             Id = 1,
             Name = "Nameless City",
