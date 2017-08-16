@@ -1,6 +1,8 @@
 ﻿using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using CityInfo.Configuration.Swagger.Examples;
+using CityInfo.WebApi.Examples;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -146,6 +148,8 @@ namespace CityInfo.WebApi
             options.DescribeAllEnumsAsStrings();
             options.DescribeAllParametersInCamelCase();
             options.DescribeStringEnumsInCamelCase();
+
+            options.SchemaFilter<ExampleSchemaFilter>(new ExamplesProvider());
         }
 
         private void AddSwaggerGenInfo(SwaggerGenOptions options)

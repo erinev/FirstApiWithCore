@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CityInfo.Configuration\CityInfo.Configuration.csproj" />
     <ProjectReference Include="..\CityInfo.Contracts\CityInfo.Contracts.csproj" />
   </ItemGroup>
 
