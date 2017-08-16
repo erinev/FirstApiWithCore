@@ -47,7 +47,7 @@ namespace CityInfo.WebApi
             services.AddMvc()
                 .AddMvcOptions(options =>
                 {
-                    ConfigureInputFormatters(options, services);
+                    ConfigureInputFormatters(options);
                     ConfigureOutputFormatters(options);
                 });
 
@@ -80,6 +80,7 @@ namespace CityInfo.WebApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
+                c.ShowRequestHeaders();
             });
         }
 
@@ -94,7 +95,7 @@ namespace CityInfo.WebApi
             Configuration = builder.Build();
         }
 
-        private void ConfigureInputFormatters(MvcOptions options, IServiceCollection services)
+        private void ConfigureInputFormatters(MvcOptions options)
         {
             options.InputFormatters.Clear();
 
@@ -139,6 +140,8 @@ namespace CityInfo.WebApi
             options.IncludeXmlComments(fullXmlDocsFilePath);
 
             options.DescribeAllEnumsAsStrings();
+            options.DescribeAllParametersInCamelCase();
+            options.DescribeStringEnumsInCamelCase();
         }
 
         private void AddSwaggerGenInfo(SwaggerGenOptions options)
