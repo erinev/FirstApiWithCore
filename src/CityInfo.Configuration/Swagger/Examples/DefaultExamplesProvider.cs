@@ -7,11 +7,36 @@ namespace CityInfo.Configuration.Swagger.Examples
 {
     internal static class DefaultExamplesProvider
     {
-        private static BadRequestResponse BadRequestResponse => new BadRequestResponse(HttpStatusCode.BadRequest.ToString(), "The request is invalid.", new Dictionary<string, string>());
-        private static UnauthorizedResponse UnauthorizedResponse => new UnauthorizedResponse(HttpStatusCode.Unauthorized.ToString(), "Authorization has been denied for this request.");
-        private static ForbiddenResponse ForbiddenResponse => new ForbiddenResponse(HttpStatusCode.Forbidden.ToString(), "No permissions to access resource.", new Dictionary<string, string>());
-        private static NotFoundResponse NotFoundResponse => new NotFoundResponse(HttpStatusCode.NotFound.ToString(), "Resource not found.", new Dictionary<string, string>());
-        private static readonly InternalServerErrorResponse InternalServerErrorResponse = new InternalServerErrorResponse(HttpStatusCode.InternalServerError.ToString(), "Something unexpected happened. Try again later.");
+        private static BadRequestResponse BadRequestResponse => 
+            new BadRequestResponse(
+                HttpStatusCode.BadRequest.ToString(), 
+                "The request is invalid.", 
+                new Dictionary<string, string> { { "paramName", "paramValue" } }
+                );
+        private static UnauthorizedResponse UnauthorizedResponse => 
+            new UnauthorizedResponse(
+                HttpStatusCode.Unauthorized.ToString(), 
+                "Authorization has been denied for this request.",
+                new Dictionary<string, string>()
+                );
+        private static ForbiddenResponse ForbiddenResponse => 
+            new ForbiddenResponse(
+                HttpStatusCode.Forbidden.ToString(), 
+                "No permissions to access resource.", 
+                new Dictionary<string, string>()
+                );
+        private static NotFoundResponse NotFoundResponse => 
+            new NotFoundResponse(
+                HttpStatusCode.NotFound.ToString(), 
+                "Resource not found.", 
+                new Dictionary<string, string>()
+                );
+        private static readonly InternalServerErrorResponse InternalServerErrorResponse = 
+            new InternalServerErrorResponse(
+                HttpStatusCode.InternalServerError.ToString(), 
+                "Something unexpected happened. Try again later.", 
+                new Dictionary<string, string>()
+                );
 
         private static readonly IDictionary<Type, object> ExampleByType = new Dictionary<Type, object>
         {
