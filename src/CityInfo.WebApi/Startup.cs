@@ -106,7 +106,11 @@ namespace CityInfo.WebApi
                 SerializationBinder = new DefaultSerializationBinder(),
                 Converters = new List<JsonConverter>
                 {
-                    new StringEnumConverter(false)
+                    new StringEnumConverter
+                    {
+                        AllowIntegerValues = true,
+                        CamelCaseText = true
+                    }
                 }
             };
             options.InputFormatters.Add(new JsonInputFormatter(Logger, sereliazerSettings, ArrayPool<char>.Shared, new DefaultObjectPoolProvider()));
