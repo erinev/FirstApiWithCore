@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using CityInfo.Configuration.Swagger.Examples;
+using CityInfo.Configuration.Swagger.Responses;
 using CityInfo.WebApi.Examples;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -138,21 +139,19 @@ namespace CityInfo.WebApi
 
         private void ConfigureSwaggerGen(SwaggerGenOptions options)
         {
-            string pathToDoc = Configuration["swagger:xmlDocsFileName"];
+            AddApiInfoToSwagger(options);
 
-            AddSwaggerGenInfo(options);
-
-            string fullXmlDocsFilePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, pathToDoc);
-            options.IncludeXmlComments(fullXmlDocsFilePath);
+            ConfigureXmlCommentsForSwagger(options);
 
             options.DescribeAllEnumsAsStrings();
             options.DescribeAllParametersInCamelCase();
             options.DescribeStringEnumsInCamelCase();
 
             options.SchemaFilter<ExampleSchemaFilter>(new ExamplesProvider());
+            options.OperationFilter<DefaultResponseOperationFilter>();
         }
 
-        private void AddSwaggerGenInfo(SwaggerGenOptions options)
+        private void AddApiInfoToSwagger(SwaggerGenOptions options)
         {
             options.SwaggerDoc("v1",
                 new Info
@@ -174,6 +173,13 @@ namespace CityInfo.WebApi
                     }
                 }
             );
+        }
+
+        private void ConfigureXmlCommentsForSwagger(SwaggerGenOptions options)
+        {
+            string pathToDoc = Configuration["swagger:xmlDocsFileName"];
+            string fullXmlDocsFilePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, pathToDoc);
+            options.IncludeXmlComments(fullXmlDocsFilePath);
         }
 
         #endregion
