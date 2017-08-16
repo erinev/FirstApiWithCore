@@ -17,10 +17,10 @@ namespace CityInfo.WebApi.ErrorResponses
             /// <summary>
             /// Builds PlaceToVisitIsNotProvided bad request response
             /// </summary>
-            /// <returns>Error response</returns>
-            public static ErrorResponse BuildResourceNotProvidedResponse()
+            /// <returns>Bad request error response</returns>
+            public static BadRequestResponse BuildResourceNotProvidedResponse()
             {
-                return new ErrorResponse(
+                return new BadRequestResponse(
                     "PlaceToVisitIsNotProvided",
                     "Place to visit resource is not provided within request",
                     new Dictionary<string, string> { }
@@ -31,10 +31,10 @@ namespace CityInfo.WebApi.ErrorResponses
             /// Builds PlaceToVisitNameIsInvalid bad request response
             /// </summary>
             /// <param name="newPlaceToVisit">new place to visit resource</param>
-            /// <returns>Error response</returns>
-            public static ErrorResponse BuildNameIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
+            /// <returns>Bad request error response</returns>
+            public static BadRequestResponse BuildNameIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
             {
-                return new ErrorResponse(
+                return new BadRequestResponse(
                     "PlaceToVisitNameIsInvalid",
                     "Provided place to visit name is too short or too long",
                     new Dictionary<string, string> {
@@ -51,10 +51,10 @@ namespace CityInfo.WebApi.ErrorResponses
             /// Builds PlaceToVisitDescriptionIsInvalid bad request response
             /// </summary>
             /// <param name="newPlaceToVisit">new place to visit resource</param>
-            /// <returns>Error response</returns>
-            public static object BuildDescriptionIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
+            /// <returns>Bad request error response</returns>
+            public static BadRequestResponse BuildDescriptionIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
             {
-                return new ErrorResponse(
+                return new BadRequestResponse(
                     "PlaceToVisitDescriptionIsInvalid",
                     "Provided place to visit description is too long",
                     new Dictionary<string, string> {
@@ -70,10 +70,10 @@ namespace CityInfo.WebApi.ErrorResponses
             /// Builds PlaceToVisitAddressIsInvalid bad request response
             /// </summary>
             /// <param name="newPlaceToVisit">new place to visit resource</param>
-            /// <returns>Error response</returns>
-            public static object BuildAddressIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
+            /// <returns>Bad request error response</returns>
+            public static BadRequestResponse BuildAddressIsInvalidResponse(Contracts.WriteModel.PlaceToVisit newPlaceToVisit)
             {
-                return new ErrorResponse(
+                return new BadRequestResponse(
                     "PlaceToVisitAddressIsInvalid",
                     "Provided place to visit address is too short or too long",
                     new Dictionary<string, string> {

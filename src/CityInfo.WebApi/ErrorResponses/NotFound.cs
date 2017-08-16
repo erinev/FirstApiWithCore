@@ -18,9 +18,9 @@ namespace CityInfo.WebApi.ErrorResponses
             /// </summary>
             /// <param name="cityId"></param>
             /// <returns>Error response</returns>
-            public static ErrorResponse BuildResponse(int cityId)
+            public static NotFoundResponse BuildResponse(int cityId)
             {
-                return new ErrorResponse(
+                return new NotFoundResponse(
                     "CityNotFound",
                     "Requested city is not found",
                     new Dictionary<string, string> {
@@ -41,9 +41,9 @@ namespace CityInfo.WebApi.ErrorResponses
             /// <param name="cityId">Unique identifier for city</param>
             /// <param name="placeToVisitId">Unique identifier for city's place to visit</param>
             /// <returns>Error response</returns>
-            public static ErrorResponse BuildResponse(int cityId, int placeToVisitId)
+            public static NotFoundResponse BuildResponse(int cityId, int placeToVisitId)
             {
-                return new ErrorResponse(
+                return new NotFoundResponse(
                     "PlaceToVisitNotFound",
                     "Requested place to visit is not found in city",
                     new Dictionary<string, string> {
