@@ -66,29 +66,22 @@ namespace CityInfo.WebApi
         /// <param name="env">Web hosting environment information</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // TODO: timings middleware
+            // TODO: exception handling middleware
             app.UseCorrelationIdHeaderMiddleware();
             app.UseRequestIdHeaderMiddleware();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler();
-            }
+            // TODO: authentication middlerware (api key)
 
             app.UseMvc();
 
-            app.UseSwagger(c =>
+            app.UseSwagger(swaggerOptions =>
             {
-                c.PreSerializeFilters.Add((swagger, httpRequest) => swagger.Host = httpRequest.Host.Value);
+                swaggerOptions.PreSerializeFilters.Add((swagger, httpRequest) => swagger.Host = httpRequest.Host.Value);
             });
-
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(swaggerUiOptions =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
-                c.ShowRequestHeaders();
+                swaggerUiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
+                swaggerUiOptions.ShowRequestHeaders();
             });
         }
 
