@@ -7,7 +7,7 @@ namespace CityInfo.Configuration.Swagger.Response
     /// <summary>
     /// Default response messages which can retruned by all endpoints
     /// </summary>
-    public class DefaultResponseOperationFilter : IOperationFilter
+    public class DefaultResponseMessagesOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {

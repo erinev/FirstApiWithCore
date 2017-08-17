@@ -1,7 +1,7 @@
 ﻿using CityInfo.Contracts.Errors;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CityInfo.Configuration.Swagger.Responses.Attributes
+namespace CityInfo.Configuration.Swagger.Response.Attributes
 {
     public class SwaggerBadRequestResponseAttribute : SwaggerResponseAttribute
     {

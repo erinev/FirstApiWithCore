@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using CityInfo.Configuration.Swagger.Examples;
-using CityInfo.Configuration.Swagger.Responses;
+using CityInfo.Configuration.Swagger.Request;
+using CityInfo.Configuration.Swagger.Response;
 using CityInfo.WebApi.Examples;
 using CityInfo.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
@@ -150,7 +151,8 @@ namespace CityInfo.WebApi
             options.DescribeStringEnumsInCamelCase();
 
             options.SchemaFilter<ExampleSchemaFilter>(new ExamplesProvider());
-            options.OperationFilter<DefaultResponseOperationFilter>();
+            options.OperationFilter<DefaultRequestHeadersOperationFilter>();
+            options.OperationFilter<DefaultResponseMessagesOperationFilter>();
             options.OperationFilter<DefaultResponseHeadersOpearationFilter>(); //This filter must be last because it adds returned headers foll all response messages
         }
 
