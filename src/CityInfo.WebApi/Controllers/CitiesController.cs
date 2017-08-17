@@ -14,7 +14,7 @@ namespace CityInfo.WebApi.Controllers
     /// <summary>
     /// Resource for managing city information
     /// </summary>
-    [Route("api/cities")]
+    [Route("api/v1/cities")]
     public class CitiesController : Controller
     {
         private static ICitiesRepository _citiesRepository;
