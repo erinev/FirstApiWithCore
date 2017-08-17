@@ -17,24 +17,24 @@ namespace CityInfo.Configuration.Swagger.Examples
             new UnauthorizedResponse(
                 HttpStatusCode.Unauthorized.ToString(), 
                 "Authorization has been denied for this request.",
-                new Dictionary<string, string>()
+                new Dictionary<string, string> { { "paramName", "paramValue" } }
                 );
         private static ForbiddenResponse ForbiddenResponse => 
             new ForbiddenResponse(
                 HttpStatusCode.Forbidden.ToString(), 
-                "No permissions to access resource.", 
-                new Dictionary<string, string>()
+                "No permissions to access resource.",
+                new Dictionary<string, string> { { "paramName", "paramValue" } }
                 );
         private static NotFoundResponse NotFoundResponse => 
             new NotFoundResponse(
                 HttpStatusCode.NotFound.ToString(), 
-                "Resource not found.", 
-                new Dictionary<string, string>()
+                "Resource not found.",
+                new Dictionary<string, string> { { "paramName", "paramValue" } }
                 );
         private static readonly InternalServerErrorResponse InternalServerErrorResponse = 
             new InternalServerErrorResponse(
                 HttpStatusCode.InternalServerError.ToString(), 
-                "Something unexpected happened. Try again later.", 
+                "Something unexpected happened. Try again later.",
                 new Dictionary<string, string>()
                 );
 

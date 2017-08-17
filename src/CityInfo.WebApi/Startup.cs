@@ -149,6 +149,7 @@ namespace CityInfo.WebApi
 
             options.SchemaFilter<ExampleSchemaFilter>(new ExamplesProvider());
             options.OperationFilter<DefaultResponseOperationFilter>();
+            options.OperationFilter<DefaultResponseHeadersOpearationFilter>(); //This filter must be last because it adds returned headers foll all response messages
         }
 
         private void AddApiInfoToSwagger(SwaggerGenOptions options)

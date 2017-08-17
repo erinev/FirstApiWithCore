@@ -10,10 +10,6 @@ namespace CityInfo.Contracts.Errors
         public string Message { get; }
         public Dictionary<string, string> Params { get; }
 
-        public ErrorResponse(string reason, string message) : this(reason, message, null)
-        {
-        }
-
         public ErrorResponse(string reason, string message, Dictionary<string, string> @params)
         {
             Reason = reason;
