@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CityInfo.Configuration.Swagger.Responses.Attributes;
+using CityInfo.Configuration.Swagger.Response.Attributes;
 using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;

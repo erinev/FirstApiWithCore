@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CityInfo.Configuration.Swagger.Responses
+namespace CityInfo.Configuration.Swagger.Response
 {
     public class DefaultResponseHeadersOpearationFilter : IOperationFilter
     {
@@ -22,7 +22,7 @@ namespace CityInfo.Configuration.Swagger.Responses
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            foreach (KeyValuePair<string, Response> response in operation.Responses)
+            foreach (KeyValuePair<string, Swashbuckle.AspNetCore.Swagger.Response> response in operation.Responses)
             {
                 if (response.Value.Headers?.Count > 0)
                 {

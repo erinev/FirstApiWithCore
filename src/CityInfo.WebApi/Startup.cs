@@ -4,6 +4,7 @@ using System.IO;
 using CityInfo.Configuration.Swagger.Examples;
 using CityInfo.Configuration.Swagger.Responses;
 using CityInfo.WebApi.Examples;
+using CityInfo.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +65,9 @@ namespace CityInfo.WebApi
         /// <param name="env">Web hosting environment information</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCorrelationIdHeaderMiddleware();
+            app.UseRequestIdHeaderMiddleware();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
