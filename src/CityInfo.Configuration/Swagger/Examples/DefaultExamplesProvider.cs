@@ -19,16 +19,10 @@ namespace CityInfo.Configuration.Swagger.Examples
                 "Authorization has been denied for this request.",
                 new Dictionary<string, string> { { "paramName", "paramValue" } }
                 );
-        private static ForbiddenResponse ForbiddenResponse => 
-            new ForbiddenResponse(
-                HttpStatusCode.Forbidden.ToString(), 
-                "No permissions to access resource.",
-                new Dictionary<string, string> { { "paramName", "paramValue" } }
-                );
         private static NotFoundResponse NotFoundResponse => 
             new NotFoundResponse(
                 HttpStatusCode.NotFound.ToString(), 
-                "Resource not found.",
+                "Requested resource was not found.",
                 new Dictionary<string, string> { { "paramName", "paramValue" } }
                 );
         private static readonly InternalServerErrorResponse InternalServerErrorResponse = 
@@ -42,7 +36,6 @@ namespace CityInfo.Configuration.Swagger.Examples
         {
             { typeof(BadRequestResponse), BadRequestResponse },
             { typeof(UnauthorizedResponse), UnauthorizedResponse },
-            { typeof(ForbiddenResponse), ForbiddenResponse },
             { typeof(NotFoundResponse), NotFoundResponse },
             { typeof(InternalServerErrorResponse), InternalServerErrorResponse }
         };

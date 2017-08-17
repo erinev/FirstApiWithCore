@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CityInfo.Configuration.Swagger.Responses.Attributes;
 using CityInfo.Contracts.Constants;
 using CityInfo.Contracts.Readmodel;
 using CityInfo.Contracts.WriteModel;
@@ -48,6 +49,7 @@ namespace CityInfo.WebApi.Controllers
         /// <returns>Single city</returns>
         [HttpGet("{cityId:int}")]
         [SwaggerResponse(200, typeof(CityDocument))]
+        [SwaggerNotFoundResponse]
         public ActionResult GetById(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -67,6 +69,7 @@ namespace CityInfo.WebApi.Controllers
         /// <returns></returns>
         [HttpDelete("{cityId:int}")]
         [SwaggerResponse(204)]
+        [SwaggerNotFoundResponse]
         public ActionResult DeleteById(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -88,6 +91,7 @@ namespace CityInfo.WebApi.Controllers
         /// <returns>Places to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit")]
         [SwaggerResponse(200, typeof(List<PlaceToVisitDocument>))]
+        [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -108,6 +112,7 @@ namespace CityInfo.WebApi.Controllers
         /// <returns>Single place to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = GetCitysPlaceToVisitByIdRouteName)]
         [SwaggerResponse(200, typeof(PlaceToVisitDocument))]
+        [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
             CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
@@ -135,6 +140,8 @@ namespace CityInfo.WebApi.Controllers
         /// <returns>Newly created place to visit</returns>
         [HttpPost("{cityId:int}/placesToVisit")]
         [SwaggerResponse(201, typeof(PlaceToVisitDocument))]
+        [SwaggerNotFoundResponse]
+        [SwaggerBadRequestResponse]
         public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
         {
             if (newPlaceToVisit == null)
