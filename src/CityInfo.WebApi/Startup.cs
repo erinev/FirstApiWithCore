@@ -133,8 +133,6 @@ namespace CityInfo.WebApi
                 }
             };
             options.OutputFormatters.Add(new JsonOutputFormatter(sereliazerSettings, ArrayPool<char>.Shared));
-
-            options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
         }
 
         private void ConfigureSwaggerGen(SwaggerGenOptions options)
