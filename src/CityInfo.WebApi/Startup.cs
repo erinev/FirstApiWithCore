@@ -1,11 +1,8 @@
 ﻿using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
-using CityInfo.Configuration.Swagger.Examples;
-using CityInfo.Configuration.Swagger.Request;
-using CityInfo.Configuration.Swagger.Response;
-using CityInfo.WebApi.Examples;
 using CityInfo.WebApi.Middlewares;
+using CityInfo.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CityInfo.WebApi
 {
@@ -28,7 +22,7 @@ namespace CityInfo.WebApi
     /// </summary>
     public class Startup
     {
-        private static IConfigurationRoot Configuration { get; set; }
+        private static IConfigurationRoot AppSettingsConfigurationReader { get; set; }
         private static ILogger<Startup> Logger { get; set; }
 
         /// <summary>
@@ -47,7 +41,7 @@ namespace CityInfo.WebApi
         /// <param name="services">By default injected services list</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureApplicationConfigReader();
+            ConfigureAppSettingsConfigReader();
 
             services.AddMvc()
                 .AddMvcOptions(options =>
@@ -56,7 +50,10 @@ namespace CityInfo.WebApi
                     ConfigureOutputFormatters(options);
                 });
 
-            services.AddSwaggerGen(ConfigureSwaggerGen);
+            services.AddSwaggerGen(options =>
+            {
+                SwaggerGenConfigurator.Configure(options, AppSettingsConfigurationReader);
+            });
         }
 
         /// <summary>
@@ -87,13 +84,13 @@ namespace CityInfo.WebApi
 
         #region Private Functions
 
-        private void ConfigureApplicationConfigReader()
+        private void ConfigureAppSettingsConfigReader()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
 
-            Configuration = builder.Build();
+            AppSettingsConfigurationReader = builder.Build();
         }
 
         private void ConfigureInputFormatters(MvcOptions options)
@@ -131,53 +128,6 @@ namespace CityInfo.WebApi
                 }
             };
             options.OutputFormatters.Add(new JsonOutputFormatter(sereliazerSettings, ArrayPool<char>.Shared));
-        }
-
-        private void ConfigureSwaggerGen(SwaggerGenOptions options)
-        {
-            AddApiInfoToSwagger(options);
-
-            ConfigureXmlCommentsForSwagger(options);
-
-            options.DescribeAllEnumsAsStrings();
-            options.DescribeAllParametersInCamelCase();
-            options.DescribeStringEnumsInCamelCase();
-
-            options.SchemaFilter<ExampleSchemaFilter>(new ExamplesProvider());
-            options.OperationFilter<DefaultRequestHeadersOperationFilter>();
-            options.OperationFilter<DefaultResponseMessagesOperationFilter>();
-            options.OperationFilter<DefaultResponseHeadersOpearationFilter>(); //This filter must be last because it adds returned headers foll all response messages
-        }
-
-        private void AddApiInfoToSwagger(SwaggerGenOptions options)
-        {
-            options.SwaggerDoc("v1",
-                new Info
-                {
-                    Title = "City Info API",
-                    Version = "v1",
-                    Description = "A simple API which allows to query and modify cities information.",
-                    TermsOfService = "None",
-                    License = new License
-                    {
-                        Name = "The GNU General Public License v3.0",
-                        Url = "https://github.com/erinev/FirstApiWithCore/blob/master/LICENCE"
-                    },
-                    Contact = new Contact
-                    {
-                        Name = "Erikas Neverdauskas",
-                        Email = "erikasnever@hotmail.com",
-                        Url = "https://github.com/erinev"
-                    }
-                }
-            );
-        }
-
-        private void ConfigureXmlCommentsForSwagger(SwaggerGenOptions options)
-        {
-            string pathToDoc = Configuration["swagger:xmlDocsFileName"];
-            string fullXmlDocsFilePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, pathToDoc);
-            options.IncludeXmlComments(fullXmlDocsFilePath);
         }
 
         #endregion
