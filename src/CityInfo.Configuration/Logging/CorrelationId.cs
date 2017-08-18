@@ -7,14 +7,11 @@ namespace CityInfo.Configuration.Logging
         private static readonly AsyncLocal<string> _current = new AsyncLocal<string>();
         public static string Current
         {
-            get
-            {
-                return _current.Value;
-            }
+            get => _current.Value;
             set
             {
                 _current.Value = value;
-                // TODO: log4net.LogicalThreadContext.Properties["CorrelationId"] = value;
+                log4net.LogicalThreadContext.Properties["CorrelationId"] = value;
             }
         }
     }
