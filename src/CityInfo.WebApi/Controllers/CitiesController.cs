@@ -149,24 +149,21 @@ namespace CityInfo.WebApi.Controllers
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildResourceNotProvidedResponse());
             }
 
-            if (newPlaceToVisitRequest.Name == null ||
-                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Name) ||
-                newPlaceToVisitRequest.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
+            if (string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Name) || 
+                newPlaceToVisitRequest.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength || 
                 newPlaceToVisitRequest.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildNameIsInvalidResponse(newPlaceToVisitRequest));
             }
 
-            if (newPlaceToVisitRequest.Description == null ||
-                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Description) ||
+            if (string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Description) || 
                 newPlaceToVisitRequest.Description.Length > ValidationRules.PlaceToVisit.MaximumDescriptionLength)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildDescriptionIsInvalidResponse(newPlaceToVisitRequest));
             }
 
-            if (newPlaceToVisitRequest.Address == null ||
-                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Address) ||
-                newPlaceToVisitRequest.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength ||
+            if (string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Address) || 
+                newPlaceToVisitRequest.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength || 
                 newPlaceToVisitRequest.Address.Length > ValidationRules.PlaceToVisit.MaximumAddressLength)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildAddressIsInvalidResponse(newPlaceToVisitRequest));
