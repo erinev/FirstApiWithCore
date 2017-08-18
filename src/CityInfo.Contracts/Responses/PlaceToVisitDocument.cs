@@ -1,11 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CityInfo.Contracts.WriteModel
+namespace CityInfo.Contracts.Responses
 {
     [Serializable]
-    public class PlaceToVisit
+    public class PlaceToVisitDocument
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 

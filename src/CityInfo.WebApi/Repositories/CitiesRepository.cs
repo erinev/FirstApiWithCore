@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CityInfo.Contracts.Readmodel;
-using CityInfo.Contracts.WriteModel;
+using CityInfo.Contracts.Responses;
+using CityInfo.Contracts.Requests;
 
 namespace CityInfo.WebApi.Repositories
 {
     interface ICitiesRepository
     {
-        List<CityDocument> GetAllCities();
-        CityDocument GetCityById(int cityId);
+        List<CityDto> GetAllCities();
+        CityDto GetCityById(int cityId);
         void DeleteCityById(int cityId);
 
-        PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit);
+        PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest);
     }
 
     /// <summary>
@@ -19,7 +19,7 @@ namespace CityInfo.WebApi.Repositories
     /// </summary>
     public class CitiesRepository : ICitiesRepository
     {
-        private List<CityDocument> _cities;
+        private List<CityDto> _cities;
 
         /// <summary>
         /// CitiesRepository constructor
@@ -33,7 +33,7 @@ namespace CityInfo.WebApi.Repositories
         /// Returns all cities
         /// </summary>
         /// <returns>List of cities</returns>
-        public List<CityDocument> GetAllCities()
+        public List<CityDto> GetAllCities()
         {
             return _cities;
         }
@@ -43,11 +43,11 @@ namespace CityInfo.WebApi.Repositories
         /// </summary>
         /// <param name="cityId">Unique identifier for city</param>
         /// <returns>Single city</returns>
-        public CityDocument GetCityById(int cityId)
+        public CityDto GetCityById(int cityId)
         {
-            CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
+            CityDto cityDto = _cities.Find(city => city.Id == cityId);
 
-            return cityDocument;
+            return cityDto;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace CityInfo.WebApi.Repositories
         /// <param name="cityId">Unique identifier for city</param>
         public void DeleteCityById(int cityId)
         {
-            List<CityDocument> listWithoutRemovedCity = _cities.Where(city => city.Id != cityId).ToList();
+            List<CityDto> listWithoutRemovedCity = _cities.Where(city => city.Id != cityId).ToList();
 
             _cities = listWithoutRemovedCity;
         }
@@ -65,32 +65,32 @@ namespace CityInfo.WebApi.Repositories
         /// Adds new place to visit for city
         /// </summary>
         /// <param name="cityId">Unique identifier for city</param>
-        /// <param name="newPlaceToVisit">New place to visit</param>
+        /// <param name="newPlaceToVisitRequest">New place to visit</param>
         /// <returns>Newly created place to visit</returns>
-        public PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisit newPlaceToVisit)
+        public PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest)
         {
-            CityDocument cityDocument = _cities.Find(city => city.Id == cityId);
+            CityDto cityDto = _cities.Find(city => city.Id == cityId);
 
             var newPlaceToVisitDocument = new PlaceToVisitDocument
             {
-                Id = cityDocument.NumberOfPlacesToVisit + 1,
-                Name = newPlaceToVisit.Name,
-                Description = newPlaceToVisit.Description,
-                Address = newPlaceToVisit.Address
+                Id = cityDto.NumberOfPlacesToVisit + 1,
+                Name = newPlaceToVisitRequest.Name,
+                Description = newPlaceToVisitRequest.Description,
+                Address = newPlaceToVisitRequest.Address
             };
 
-            cityDocument.PlacesToVisit.Add(newPlaceToVisitDocument);
+            cityDto.PlacesToVisit.Add(newPlaceToVisitDocument);
 
             return newPlaceToVisitDocument;
         }
 
         #region Private Functions
 
-        private static List<CityDocument> BuildCitiesMock()
+        private static List<CityDto> BuildCitiesMock()
         {
-            var cities = new List<CityDocument>
+            var cities = new List<CityDto>
             {
-                new CityDocument
+                new CityDto
                 {
                     Id = 1,
                     Name = "Birštonas",
@@ -113,7 +113,7 @@ namespace CityInfo.WebApi.Repositories
                         },
                     }
                 },
-                new CityDocument
+                new CityDto
                 {
                     Id = 2,
                     Name = "Kaunas",
@@ -129,7 +129,7 @@ namespace CityInfo.WebApi.Repositories
                         }
                     }
                 },
-                new CityDocument
+                new CityDto
                 {
                     Id = 3,
                     Name = "Vilnius",

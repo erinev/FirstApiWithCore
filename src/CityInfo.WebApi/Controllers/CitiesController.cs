@@ -2,8 +2,8 @@
 using System.Linq;
 using CityInfo.Configuration.Swagger.Response.Attributes;
 using CityInfo.Contracts.Constants;
-using CityInfo.Contracts.Readmodel;
-using CityInfo.Contracts.WriteModel;
+using CityInfo.Contracts.Responses;
+using CityInfo.Contracts.Requests;
 using CityInfo.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -34,10 +34,10 @@ namespace CityInfo.WebApi.Controllers
         /// </summary>
         /// <returns>List of cities</returns>
         [HttpGet()]
-        [SwaggerResponse(200, typeof(List<CityDocument>))]
+        [SwaggerResponse(200, typeof(List<CityDto>))]
         public ActionResult GetAll()
         {
-            List<CityDocument> cities = _citiesRepository.GetAllCities();
+            List<CityDto> cities = _citiesRepository.GetAllCities();
 
             return Ok(cities);
         }
@@ -48,18 +48,18 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="cityId">Unique identifier for city</param>
         /// <returns>Single city</returns>
         [HttpGet("{cityId:int}")]
-        [SwaggerResponse(200, typeof(CityDocument))]
+        [SwaggerResponse(200, typeof(CityDto))]
         [SwaggerNotFoundResponse]
         public ActionResult GetById(int cityId)
         {
-            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+            CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDocument == null)
+            if (cityDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            return Ok(cityDocument);
+            return Ok(cityDto);
         }
 
         /// <summary>
@@ -72,9 +72,9 @@ namespace CityInfo.WebApi.Controllers
         [SwaggerNotFoundResponse]
         public ActionResult DeleteById(int cityId)
         {
-            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+            CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDocument == null)
+            if (cityDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
@@ -94,14 +94,14 @@ namespace CityInfo.WebApi.Controllers
         [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
-            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+            CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDocument == null)
+            if (cityDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            return Ok(cityDocument.PlacesToVisit);
+            return Ok(cityDto.PlacesToVisit);
         }
 
         /// <summary>
@@ -115,14 +115,14 @@ namespace CityInfo.WebApi.Controllers
         [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
-            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+            CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDocument is null)
+            if (cityDto is null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            PlaceToVisitDocument placeToVisitDocument = cityDocument.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
+            PlaceToVisitDocument placeToVisitDocument = cityDto.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
 
             if (placeToVisitDocument is null)
             {
@@ -136,47 +136,47 @@ namespace CityInfo.WebApi.Controllers
         /// Adds new place to visit for city
         /// </summary>
         /// <param name="cityId">Unique identifier for city</param>
-        /// <param name="newPlaceToVisit">New place to visit</param>
+        /// <param name="newPlaceToVisitRequest">New place to visit</param>
         /// <returns>Newly created place to visit</returns>
         [HttpPost("{cityId:int}/placesToVisit")]
         [SwaggerResponse(201, typeof(PlaceToVisitDocument))]
         [SwaggerNotFoundResponse]
         [SwaggerBadRequestResponse]
-        public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisit newPlaceToVisit)
+        public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisitRequest newPlaceToVisitRequest)
         {
-            if (newPlaceToVisit == null)
+            if (newPlaceToVisitRequest == null)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildResourceNotProvidedResponse());
             }
 
-            if (newPlaceToVisit.Name == null ||
-                newPlaceToVisit.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
-                newPlaceToVisit.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
+            if (newPlaceToVisitRequest.Name == null ||
+                newPlaceToVisitRequest.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
+                newPlaceToVisitRequest.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
-                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildNameIsInvalidResponse(newPlaceToVisit));
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildNameIsInvalidResponse(newPlaceToVisitRequest));
             }
 
-            if (newPlaceToVisit.Description == null ||
-                newPlaceToVisit.Description.Length > ValidationRules.PlaceToVisit.MaximumDescriptionLength)
+            if (newPlaceToVisitRequest.Description == null ||
+                newPlaceToVisitRequest.Description.Length > ValidationRules.PlaceToVisit.MaximumDescriptionLength)
             {
-                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildDescriptionIsInvalidResponse(newPlaceToVisit));
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildDescriptionIsInvalidResponse(newPlaceToVisitRequest));
             }
 
-            if (newPlaceToVisit.Address == null ||
-                newPlaceToVisit.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength ||
-                newPlaceToVisit.Address.Length > ValidationRules.PlaceToVisit.MaximumAddressLength)
+            if (newPlaceToVisitRequest.Address == null ||
+                newPlaceToVisitRequest.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength ||
+                newPlaceToVisitRequest.Address.Length > ValidationRules.PlaceToVisit.MaximumAddressLength)
             {
-                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildAddressIsInvalidResponse(newPlaceToVisit));
+                return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildAddressIsInvalidResponse(newPlaceToVisitRequest));
             }
 
-            CityDocument cityDocument = _citiesRepository.GetCityById(cityId);
+            CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDocument == null)
+            if (cityDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            PlaceToVisitDocument addedPlaceToVisitDocument = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisit);
+            PlaceToVisitDocument addedPlaceToVisitDocument = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisitRequest);
 
             return CreatedAtRoute(
                 GetCitysPlaceToVisitByIdRouteName, 

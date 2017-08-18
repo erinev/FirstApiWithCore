@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CityInfo.Contracts.Readmodel
+namespace CityInfo.Contracts.Responses
 {
     [Serializable]
-    public class CityDocument
+    public class CityDto
     {
         [Required]
         public int Id { get; set; }

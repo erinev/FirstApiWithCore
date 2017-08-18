@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CityInfo.Configuration.Swagger.Examples;
-using CityInfo.Contracts.Readmodel;
-using CityInfo.Contracts.WriteModel;
+using CityInfo.Contracts.Responses;
+using CityInfo.Contracts.Requests;
 
 namespace CityInfo.WebApi.Examples
 {
@@ -13,9 +13,9 @@ namespace CityInfo.WebApi.Examples
     {
         private static readonly IDictionary<Type, object> ExampleByType = new Dictionary<Type, object>
         {
-            { typeof(CityDocument), Examples.CityDocumentExample },
+            { typeof(CityDto), Examples.CityDtoExample },
             { typeof(PlaceToVisitDocument), Examples.PlaceToVisitDocumentExample },
-            { typeof(PlaceToVisit), Examples.PlaceToVisitExample }
+            { typeof(PlaceToVisitRequest), Examples.PlaceToVisitRequestExample }
         };
 
         /// <summary>
