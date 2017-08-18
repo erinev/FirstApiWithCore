@@ -11,7 +11,7 @@ namespace CityInfo.WebApi.Repositories
         CityDto GetCityById(int cityId);
         void DeleteCityById(int cityId);
 
-        PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest);
+        PlaceToVisitDto AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest);
     }
 
     /// <summary>
@@ -67,11 +67,11 @@ namespace CityInfo.WebApi.Repositories
         /// <param name="cityId">Unique identifier for city</param>
         /// <param name="newPlaceToVisitRequest">New place to visit</param>
         /// <returns>Newly created place to visit</returns>
-        public PlaceToVisitDocument AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest)
+        public PlaceToVisitDto AddPlaceToVisitForCity(int cityId, PlaceToVisitRequest newPlaceToVisitRequest)
         {
             CityDto cityDto = _cities.Find(city => city.Id == cityId);
 
-            var newPlaceToVisitDocument = new PlaceToVisitDocument
+            var newPlaceToVisitDocument = new PlaceToVisitDto
             {
                 Id = cityDto.NumberOfPlacesToVisit + 1,
                 Name = newPlaceToVisitRequest.Name,
@@ -95,16 +95,16 @@ namespace CityInfo.WebApi.Repositories
                     Id = 1,
                     Name = "Birštonas",
                     Description = "City of dreams",
-                    PlacesToVisit = new List<PlaceToVisitDocument>
+                    PlacesToVisit = new List<PlaceToVisitDto>
                     {
-                        new PlaceToVisitDocument
+                        new PlaceToVisitDto
                         {
                             Id = 1,
                             Name = "Banginuko vaišės",
                             Description = "Deserts and snacks caffe",
                             Address = "Birutės g. 29, Birštonas LT-59217"
                         },
-                        new PlaceToVisitDocument
+                        new PlaceToVisitDto
                         {
                             Id = 2,
                             Name = "Saulės terasa",
@@ -118,9 +118,9 @@ namespace CityInfo.WebApi.Repositories
                     Id = 2,
                     Name = "Kaunas",
                     Description = "City of contruction",
-                    PlacesToVisit = new List<PlaceToVisitDocument>
+                    PlacesToVisit = new List<PlaceToVisitDto>
                     {
-                        new PlaceToVisitDocument
+                        new PlaceToVisitDto
                         {
                             Id = 1,
                             Name = "Pilies Sodas",
@@ -134,9 +134,9 @@ namespace CityInfo.WebApi.Repositories
                     Id = 3,
                     Name = "Vilnius",
                     Description = "City of wasted money",
-                    PlacesToVisit = new List<PlaceToVisitDocument>
+                    PlacesToVisit = new List<PlaceToVisitDto>
                     {
-                        new PlaceToVisitDocument
+                        new PlaceToVisitDto
                         {
                             Id = 1,
                             Name = "Cat Caffe",

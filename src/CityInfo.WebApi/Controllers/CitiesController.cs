@@ -90,7 +90,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="cityId">Unique identifier for city</param>
         /// <returns>Places to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit")]
-        [SwaggerResponse(200, typeof(List<PlaceToVisitDocument>))]
+        [SwaggerResponse(200, typeof(List<PlaceToVisitDto>))]
         [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlacesToVisit(int cityId)
         {
@@ -111,25 +111,25 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="placeToVisitId">Unique identifier for city's place to visit</param>
         /// <returns>Single place to visit</returns>
         [HttpGet("{cityId:int}/placesToVisit/{placeToVisitId:int}", Name = GetCitysPlaceToVisitByIdRouteName)]
-        [SwaggerResponse(200, typeof(PlaceToVisitDocument))]
+        [SwaggerResponse(200, typeof(PlaceToVisitDto))]
         [SwaggerNotFoundResponse]
         public ActionResult GetCitysPlaceToVisitById(int cityId, int placeToVisitId)
         {
             CityDto cityDto = _citiesRepository.GetCityById(cityId);
 
-            if (cityDto is null)
+            if (cityDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            PlaceToVisitDocument placeToVisitDocument = cityDto.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
+            PlaceToVisitDto placeToVisitDto = cityDto.PlacesToVisit.FirstOrDefault(place => place.Id == placeToVisitId);
 
-            if (placeToVisitDocument is null)
+            if (placeToVisitDto == null)
             {
                 return NotFound(ErrorResponses.NotFound.PlaceToVisit.BuildResponse(cityId, placeToVisitId));
             }
 
-            return Ok(placeToVisitDocument);
+            return Ok(placeToVisitDto);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace CityInfo.WebApi.Controllers
         /// <param name="newPlaceToVisitRequest">New place to visit</param>
         /// <returns>Newly created place to visit</returns>
         [HttpPost("{cityId:int}/placesToVisit")]
-        [SwaggerResponse(201, typeof(PlaceToVisitDocument))]
+        [SwaggerResponse(201, typeof(PlaceToVisitDto))]
         [SwaggerNotFoundResponse]
         [SwaggerBadRequestResponse]
         public ActionResult AddPlaceToVisitForCity(int cityId, [FromBody] PlaceToVisitRequest newPlaceToVisitRequest)
@@ -150,6 +150,7 @@ namespace CityInfo.WebApi.Controllers
             }
 
             if (newPlaceToVisitRequest.Name == null ||
+                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Name) ||
                 newPlaceToVisitRequest.Name.Length < ValidationRules.PlaceToVisit.MinimumNameLength ||
                 newPlaceToVisitRequest.Name.Length > ValidationRules.PlaceToVisit.MaximumNameLength)
             {
@@ -157,12 +158,14 @@ namespace CityInfo.WebApi.Controllers
             }
 
             if (newPlaceToVisitRequest.Description == null ||
+                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Description) ||
                 newPlaceToVisitRequest.Description.Length > ValidationRules.PlaceToVisit.MaximumDescriptionLength)
             {
                 return BadRequest(ErrorResponses.BadRequest.PlaceToVisit.BuildDescriptionIsInvalidResponse(newPlaceToVisitRequest));
             }
 
             if (newPlaceToVisitRequest.Address == null ||
+                string.IsNullOrWhiteSpace(newPlaceToVisitRequest.Address) ||
                 newPlaceToVisitRequest.Address.Length < ValidationRules.PlaceToVisit.MininumAddressLength ||
                 newPlaceToVisitRequest.Address.Length > ValidationRules.PlaceToVisit.MaximumAddressLength)
             {
@@ -176,12 +179,12 @@ namespace CityInfo.WebApi.Controllers
                 return NotFound(ErrorResponses.NotFound.City.BuildResponse(cityId));
             }
 
-            PlaceToVisitDocument addedPlaceToVisitDocument = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisitRequest);
+            PlaceToVisitDto addedPlaceToVisitDto = _citiesRepository.AddPlaceToVisitForCity(cityId, newPlaceToVisitRequest);
 
             return CreatedAtRoute(
                 GetCitysPlaceToVisitByIdRouteName, 
-                new { cityId, placeToVisitId = addedPlaceToVisitDocument.Id }, 
-                addedPlaceToVisitDocument);
+                new { cityId, placeToVisitId = addedPlaceToVisitDto.Id }, 
+                addedPlaceToVisitDto);
         }
     }
 }

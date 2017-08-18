@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace CityInfo.Contracts.Responses
 {
     [Serializable]
-    public class PlaceToVisitDocument
+    public class PlaceToVisitDto
     {
         [Required]
         public int Id { get; set; }

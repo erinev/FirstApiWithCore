@@ -14,7 +14,7 @@ namespace CityInfo.WebApi.Examples
         private static readonly IDictionary<Type, object> ExampleByType = new Dictionary<Type, object>
         {
             { typeof(CityDto), Examples.CityDtoExample },
-            { typeof(PlaceToVisitDocument), Examples.PlaceToVisitDocumentExample },
+            { typeof(PlaceToVisitDto), Examples.PlaceToVisitDtoExample },
             { typeof(PlaceToVisitRequest), Examples.PlaceToVisitRequestExample }
         };
 

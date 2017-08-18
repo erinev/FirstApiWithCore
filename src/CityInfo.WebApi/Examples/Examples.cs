@@ -11,9 +11,9 @@ namespace CityInfo.WebApi.Examples
             Id = 1,
             Name = "Nameless City",
             Description = "City where name doesn't matter",
-            PlacesToVisit = new List<PlaceToVisitDocument>
+            PlacesToVisit = new List<PlaceToVisitDto>
             {
-                new PlaceToVisitDocument
+                new PlaceToVisitDto
                 {
                     Id = 1,
                     Name = "Nameless place",
@@ -23,7 +23,7 @@ namespace CityInfo.WebApi.Examples
             }
         };
 
-        internal static readonly PlaceToVisitDocument PlaceToVisitDocumentExample = new PlaceToVisitDocument
+        internal static readonly PlaceToVisitDto PlaceToVisitDtoExample = new PlaceToVisitDto
         {
             Id = 1,
             Name = "Nameless place",

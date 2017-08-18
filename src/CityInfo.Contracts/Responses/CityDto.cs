@@ -20,6 +20,6 @@ namespace CityInfo.Contracts.Responses
         public int NumberOfPlacesToVisit => PlacesToVisit.Count;
 
         [Required]
-        public List<PlaceToVisitDocument> PlacesToVisit { get; set; } = new List<PlaceToVisitDocument>();
+        public List<PlaceToVisitDto> PlacesToVisit { get; set; } = new List<PlaceToVisitDto>();
     }
 }
