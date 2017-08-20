@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Linq;
+using CityInfo.Configuration.Logging.Log4Net;
 using CityInfo.WebApi.Configurators;
 using CityInfo.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
@@ -52,8 +54,11 @@ namespace CityInfo.WebApi
         /// </summary>
         /// <param name="app">Application request pipline configurator</param>
         /// <param name="env">Web hosting environment information</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <param name="loggerFactory">Logging system configuration factory</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            ConfigureLog4Net(loggerFactory);
+
             // TODO: timings middleware
             // TODO: exception handling middleware
             app.UseCorrelationIdHeaderMiddleware();
@@ -71,6 +76,8 @@ namespace CityInfo.WebApi
                 swaggerUiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
                 swaggerUiOptions.ShowRequestHeaders();
             });
+
+            Logger.LogInformation($"'{env.ApplicationName}' application is started on '{app.ServerFeatures.Revision}' address");
         }
 
         #region Private Functions
@@ -82,6 +89,12 @@ namespace CityInfo.WebApi
                 .AddJsonFile("appsettings.json");
 
             AppSettingsConfigurationReader = builder.Build();
+        }
+
+        private void ConfigureLog4Net(ILoggerFactory loggerFactory)
+        {
+            string log4NetConfigFileName = AppSettingsConfigurationReader["log4Net:configFileName"];
+            loggerFactory.AddLog4Net(log4NetConfigFileName);
         }
 
         #endregion
