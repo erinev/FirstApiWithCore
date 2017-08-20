@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using CityInfo.Configuration.Logging.Log4Net;
 using CityInfo.WebApi.Configurators;
 using CityInfo.WebApi.Middlewares;
