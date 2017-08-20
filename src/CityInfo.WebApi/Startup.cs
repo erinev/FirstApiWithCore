@@ -1,19 +1,11 @@
-﻿using System.Buffers;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using CityInfo.WebApi.Configurators;
 using CityInfo.WebApi.Middlewares;
-using CityInfo.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ObjectPool;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace CityInfo.WebApi
 {
@@ -46,8 +38,7 @@ namespace CityInfo.WebApi
             services.AddMvc()
                 .AddMvcOptions(options =>
                 {
-                    ConfigureInputFormatters(options);
-                    ConfigureOutputFormatters(options);
+                    MvcOptionsConfigurator.Configure(options, Logger);
                 });
 
             services.AddSwaggerGen(options =>
@@ -91,43 +82,6 @@ namespace CityInfo.WebApi
                 .AddJsonFile("appsettings.json");
 
             AppSettingsConfigurationReader = builder.Build();
-        }
-
-        private void ConfigureInputFormatters(MvcOptions options)
-        {
-            options.InputFormatters.Clear();
-
-            var sereliazerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Include,
-                ContractResolver = new DefaultContractResolver(),
-                SerializationBinder = new DefaultSerializationBinder(),
-                Converters = new List<JsonConverter>
-                {
-                    new StringEnumConverter
-                    {
-                        AllowIntegerValues = true,
-                        CamelCaseText = true
-                    }
-                }
-            };
-            options.InputFormatters.Add(new JsonInputFormatter(Logger, sereliazerSettings, ArrayPool<char>.Shared, new DefaultObjectPoolProvider()));
-        }
-
-        private void ConfigureOutputFormatters(MvcOptions options)
-        {
-            options.OutputFormatters.Clear();
-
-            var sereliazerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Converters = new List<JsonConverter>
-                {
-                    new StringEnumConverter(true)
-                }
-            };
-            options.OutputFormatters.Add(new JsonOutputFormatter(sereliazerSettings, ArrayPool<char>.Shared));
         }
 
         #endregion

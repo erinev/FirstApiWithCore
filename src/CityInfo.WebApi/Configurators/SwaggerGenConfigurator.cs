@@ -8,7 +8,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CityInfo.WebApi.Swagger
+namespace CityInfo.WebApi.Configurators
 {
     /// <summary>
     /// Swagger options configurator
