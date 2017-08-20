@@ -64,7 +64,7 @@ namespace CityInfo.WebApi.Middlewares
 
             context.Response.Headers.Add(_requestIdHeaderName, new StringValues(RequestId.Current));
 
-            return this._next(context);
+            return _next(context);
         }
     }
 }

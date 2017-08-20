@@ -9,6 +9,7 @@ namespace CityInfo.Configuration.Logging.Log4Net
     {
         private readonly string _log4NetConfigFile;
         private readonly ConcurrentDictionary<string, Log4NetLogger> _loggers = new ConcurrentDictionary<string, Log4NetLogger>();
+        private static readonly NoopLogger NoopLogger = new NoopLogger();
 
         public Log4NetProvider(string log4NetConfigFile)
         {
@@ -17,7 +18,10 @@ namespace CityInfo.Configuration.Logging.Log4Net
 
         public ILogger CreateLogger(string categoryName)
         {
-            // TODO: Filter Microsoft loggers
+            if (categoryName.StartsWith("Microsoft."))
+            {
+                return NoopLogger;
+            }
 
             return _loggers.GetOrAdd(categoryName, CreateLoggerImplementation);
         }

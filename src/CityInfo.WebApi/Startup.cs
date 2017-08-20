@@ -21,7 +21,7 @@ namespace CityInfo.WebApi
         /// <summary>
         /// Startup contructor
         /// </summary>
-        /// <param name="logger"></param>
+        /// <param name="logger">Startup logger</param>
         public Startup(ILogger<Startup> logger)
         {
             Logger = logger;
@@ -75,8 +75,6 @@ namespace CityInfo.WebApi
                 swaggerUiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
                 swaggerUiOptions.ShowRequestHeaders();
             });
-
-            Logger.LogInformation($"'{env.ApplicationName}' application is started on '{app.ServerFeatures.Revision}' address");
         }
 
         #region Private Functions
