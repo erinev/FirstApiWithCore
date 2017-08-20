@@ -17,6 +17,8 @@ namespace CityInfo.Configuration.Logging.Log4Net
 
         public ILogger CreateLogger(string categoryName)
         {
+            // TODO: Filter Microsoft loggers
+
             return _loggers.GetOrAdd(categoryName, CreateLoggerImplementation);
         }
 
